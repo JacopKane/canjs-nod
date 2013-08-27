@@ -1,9 +1,8 @@
 canjs-nod
 =========
 
-Extra functionalities for a ready to go CanJS as AMD module, more opinionated and event behavioured.
-
-More info and some refactroing coming soon.
+A ready to go CanJS plugin as an AMD module with more opinionated and event behavioured extra functionalities.
+More info, some refactroring and generator installer are coming soon.
 
 ## Install with Bower
 ```bash
