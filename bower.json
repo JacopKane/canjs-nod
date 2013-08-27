@@ -1,7 +1,7 @@
 {
-  "name"          : "canjs-nod",
-  "version"       : "0.0.1",
-  "description"   : "Extra functionalities for a ready to go CanJS as AMD, more opinionated and event behavioured.",
+  "name": "canjs-nod",
+  "version": "0.0.1",
+  "description": "Extra functionalities for a ready to go CanJS as AMD, more opinionated and event behavioured.",
   "keywords": [
     "canjs",
     "can",
@@ -12,14 +12,19 @@
     "css",
     "mustache"
   ],
-  "authors"       : [
+  "authors": [
     "Furkan Tunalı <furkan@nod.st>",
     "NOD Studios <hey@nod.st>"
   ],
-  "main"          : "nod.js",
-  "dependencies"  : {
+  "main": "nod.js",
+  "dependencies": {
     "canjs": "1.*.*",
     "jquery": "*",
-    "stacktrace"  : ">=0.5.3"
+    "stacktrace": ">=0.5.3",
+    "requirejs": "~2.1.8",
+    "requirejs-text": "~2.0.10"
+  },
+  "devDependencies": {
+    "less.js": ">=1.4.2"
   }
 }
