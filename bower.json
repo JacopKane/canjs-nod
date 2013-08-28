@@ -23,6 +23,6 @@
 		"stacktrace"	: "0.*.*",
 		"requirejs"		: "2.*.*",
 		"text"			: "requirejs-text#2.*.*",
-		"less.js"		: "1.*.*"
+		"less"			: "less.js#1.*.*"
 	}
 }
