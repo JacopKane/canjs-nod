@@ -415,8 +415,9 @@
 			arraySlice				: function (obj, slice) {
 				return Array.prototype.slice.call(obj).slice(slice);
 			},
-			respond						: function (status, deferred, args) {
-				var method, state;
+			respond						: function (status, deferred) {
+				var	method, state,
+					args = this.arraySlice(arguments, 2);
 
 				if (typeof status !== 'boolean') {
 					return false;
@@ -733,14 +734,18 @@
 					return this.applyResolve(afterStyle, arguments);
 				}
 
-				if (name && can.$.isfunction(loadMethod) && $styleLink) {
-					loadMethod($styleLink, styleOptions)
-						.then(function () {
-							this.attachToNamespace(this.name, styleOptions.type, arguments[0]);
-							return this.applyResolve(afterStyle, arguments);
-						}.bind(this), function () {
-							return this.reject(afterStyle, name, styleOptions);
-						}.bind(this));
+				if (name) {
+					if (can.$.isFunction(loadMethod, this)) {
+						if ($styleLink) {
+							loadMethod($styleLink, styleOptions)
+								.then(function () {
+									this.attachToNamespace(this.name, styleOptions.type, arguments[0]);
+									return this.applyResolve(afterStyle, arguments);
+								}.bind(this), function () {
+									return this.reject(afterStyle, name, styleOptions);
+								}.bind(this));
+						}
+					}
 				}
 
 				return afterStyle.promise();
