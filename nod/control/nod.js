@@ -473,10 +473,11 @@
 				}
 
 				this.require({
-					type	: viewOptions.type,
-					ext		: viewOptions.extension,
-					plugin	: 'text',
-					name	: name
+					namespace	: viewOptions.type,
+					type		: this.options.namespace,
+					ext			: viewOptions.extension,
+					plugin		: 'text',
+					name		: name
 				})
 				.then(function (template) {
 					this.getElement('body').append(this.makeTemplate({
