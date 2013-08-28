@@ -16,7 +16,7 @@
     "Furkan Tunalı <furkan@nod.st>",
     "NOD Studios <hey@nod.st>"
   ],
-  "main": "nod.js",
+  "main": "nod/",
   "dependencies": {
     "canjs": "1.*.*",
     "jquery": "*",
