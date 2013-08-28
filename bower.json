@@ -22,8 +22,7 @@
     "jquery": "*",
     "stacktrace": ">=0.5.3",
     "requirejs": "2.*",
-    "requirejs-text": "2.*",
-    "text": "requirejs-text#~2.0.10"
+    "text": "requirejs-text#~2.*"
   },
   "devDependencies": {
     "less.js": "1.*"
