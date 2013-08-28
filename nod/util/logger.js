@@ -2,8 +2,8 @@ define([
 	'can/util/can',
 	'nod/util/nod',
 	'can/construct',
-	'nod/vendor/stacktrace',
-	'nod/vendor/sugar.string'
+	'nod/vendor/sugar.string',
+	'stacktrace'
 ], function (can, nod) {
 	"use strict";
 
