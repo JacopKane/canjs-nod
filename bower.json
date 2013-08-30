@@ -18,11 +18,11 @@
   ],
   "main": "nod/",
   "dependencies": {
-	"canjs"			: "1.*.*",
-	"jquery"		: "*",
-	"stacktrace"	: "0.*.*",
-	"requirejs"		: "2.*.*",
-	"text"			: "requirejs-text#2.*.*",
-	"less"			: "less.js#1.*.*"
+    "canjs": "1.*.*",
+    "jquery": "*",
+    "stacktrace": "0.*.*",
+    "requirejs": "2.*.*",
+    "text": "requirejs-text#2.*.*",
+    "less": "less.js#~1.*.*"
   }
 }

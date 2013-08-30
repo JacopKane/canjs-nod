@@ -1,7 +1,10 @@
-define([
-	'nod/util/can',
-	'nod/control/nod',
-], function (nod) {
+(function (window, document, define) {
 	'use strict';
-	return nod;
-});
+	return define([
+		'nod/util/can',
+		'nod/util/logger',
+		'nod/control/nod',
+	], function (nod) {
+		return nod;
+	});
+}) (window, document, define);

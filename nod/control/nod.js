@@ -9,7 +9,7 @@
 		'can/control',
 		'can/view/mustache'
 	], function (can, nod) {
-		nod.Control = can.Control({
+		nod.control.Nod = can.Control({
 			newInstance	: function () {
 				var inst = this.instance.apply(this, arguments),
 					args = arguments;
@@ -19,7 +19,6 @@
 				}
 			},
 			defaults		: {
-				test			: 'test',
 				selector		: false,
 				namespace		: 'app',
 				skipSetup		: {
@@ -60,8 +59,8 @@
 			templates	: {},
 			styles		: {},
 			namespace	: {
-				Control		: {},
-				Model		: {},
+				control		: {},
+				model		: {},
 				instance	: {},
 				view		: {},
 				style		: {},
@@ -178,7 +177,7 @@
 					this.name = this.options.name;
 				}
 				if (!this.selector) {
-					this.selector = element;
+					this.selector = element || this.element.selector;
 				}
 				if (!this.options.selectors[this.name]) {
 					this.options.selectors[this.name] = element;
