@@ -1,6 +1,6 @@
 {
   "name": "canjs-nod",
-  "version": "0.0.7",
+  "version": "0.0.8",
   "description": "A ready to go CanJS plugin as an AMD module with more opinionated and event behavioured extra functionalities.",
   "keywords": [
     "canjs",

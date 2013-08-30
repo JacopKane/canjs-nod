@@ -1,17 +1,16 @@
-(function (window, document, define, GLOBALNOD) {
+(function (window, document, define) {
 	'use strict';
 	return define(function () {
 		var nod = window.nod || {
 			control	: {},
 			model	: {}
 		};
-		if (typeof GLOBALNOD === 'undefined') {
-			return nod;
-		}
-		if (GLOBALNOD === false) {
-			return nod;
+		if (typeof window.GLOBALNOD !== 'undefined') {
+			if (window.GLOBALNOD === false) {
+				return nod;
+			}
 		}
 		window.nod = nod;
 		return nod;
 	});
-}) (window, document, define, GLOBALNOD);
+}) (window, document, define);
