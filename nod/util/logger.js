@@ -14,7 +14,7 @@
 			initialized			: false,
 			logText				: '\'%s\'->\'%s\'',
 			trace				: function () {
-				return printStackTrace().slice(5);
+				return printStackTrace().slice(4);
 			},
 			logElements			: function () {
 				console.groupCollapsed('Elements');

@@ -1,6 +1,7 @@
 (function (define, require, window, document) {
 	'use strict';
 	return define([
+		'app/util/app',
 		'can/util/can',
 		'nod/util/nod',
 		'nod/util/logger',
@@ -8,7 +9,7 @@
 		'can/construct/super',
 		'can/control',
 		'can/view/mustache'
-	], function (can, nod) {
+	], function (app, can, nod) {
 		nod.control.Nod = can.Control({
 			newInstance	: function () {
 				var inst = this.instance.apply(this, arguments),
@@ -224,7 +225,7 @@
 				if (this.getLoaded(instanceName, 'instance')) {
 					instanceName = can.cid(instance, instanceName);
 				}
-						
+
 				this.getLoadedType('instance')[instanceName] = this;
 			},
 			getFullName				: function (args) {
@@ -338,12 +339,13 @@
 			},
 			getNamespace		: function (namespace, scope) {
 				namespace	= namespace || this.options.namespace;
-				scope		= scope || window || this;
+				scope		= scope || window;
+
 				if (!namespace) {
 					return false;
 				}
 				if (!scope[namespace]) {
-					scope[namespace] = this.namespace;
+					return false;
 				}
 				return scope[namespace];
 			},
@@ -365,8 +367,7 @@
 			},
 			newControl				: function (name, options, element) {
 				var afterControl	= can.$.Deferred(),
-					type			= 'Control';
-
+					type			= 'control';
 				if (!name) {
 					return this.reject(afterControl, name, options, element);
 				}
@@ -385,7 +386,7 @@
 						var Control = this.getLoaded(name, type),
 							instance;
 
-						instance		= new Control(element, options);
+						instance = new Control(element, options);
 						return instance.getFilter('afterInit').promise();
 
 					}.bind(this))
@@ -588,17 +589,18 @@
 				if (!name) {
 					return false;
 				}
-				if (can.$.inArray(type, ['Control', 'instance']) !== -1) {
+				if (!type) {
+					return false;
+				}
+				if (can.$.inArray(type, ['control', 'model']) !== -1) {
 					name = name.camelize();
 				}
-
 				var loaded = this.getLoadedType(type);
 				if (loaded) {
 					if (loaded[name]) {
 						return loaded[name];
 					}
 				}
-					
 				return false;
 			},
 			getLoadedType		: function (type) {

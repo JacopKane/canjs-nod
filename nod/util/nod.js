@@ -11,6 +11,6 @@
 			}
 		}
 		window.nod = nod;
-		return nod;
+		return window.nod;
 	});
 }) (window, document, define);
