@@ -1,6 +1,6 @@
-(function (window, document, define) {
+(function (window) {
 	'use strict';
-	return define(function () {
+	window.define(function () {
 		var nod = window.nod || {
 			control	: {},
 			model	: {}
@@ -13,4 +13,4 @@
 		window.nod = nod;
 		return window.nod;
 	});
-}) (window, document, define);
+}) (window);
