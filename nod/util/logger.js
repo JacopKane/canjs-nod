@@ -1,18 +1,18 @@
-(function (window) {
+(function (window, define) {
     'use strict';
-    window.define([
+    define([
         'nod/util/nod',
-        'can/util/library',
+        'can/util/can',
+        'stacktrace',
         'can/construct',
-        'nod/vendor/sugar.string',
-        'stacktrace'
-    ], function (nod, can) {
+        'nod/vendor/sugar.string'
+    ], function (nod, can, stackTrace) {
         nod.Logger = new can.Construct({}, {
             object              : false,
             initialized         : false,
             logText             : '\'%s\'->\'%s\'',
             trace               : function () {
-                return window.printStackTrace().slice(4);
+                return stackTrace().slice(4);
             },
             logElements         : function () {
                 window.console.groupCollapsed('Elements');
@@ -41,7 +41,7 @@
                 return this;
             },
             log                 : function () {
-                if (!console) {
+                if (!window.console) {
                     return false;
                 }
                 if (!this.initialized) {
@@ -57,13 +57,16 @@
                     }
                 }
                 var stack   = this.trace().slice(1),
-                    self    = this;
+                    self    = this,
+                    stackFirst;
+                stackFirst = stack[0].trim().replace('at ', '');
 
-                window.console.group(this.logText, this.object.name, stack[0].trim().replace('at ', ''));
+                window.console.group(this.logText, this.object.name, stackFirst);
 
                 window.console.group('Log');
-                can.$.each(arguments, function (k, v) {
-                    window.console.log(v);
+                can.$.each(arguments, function (key, value) {
+                    /*jslint unparam: true*/
+                    window.console.log(value);
                 });
                 window.console.groupEnd();
 
@@ -82,7 +85,6 @@
                     this.logOptions();
                 }
 
-
                 window.console.groupEnd();
 
                 return arguments;
@@ -90,4 +92,4 @@
         });
         return nod;
     });
-}) (window);
+}(window, define));

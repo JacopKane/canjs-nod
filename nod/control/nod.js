@@ -1,7 +1,6 @@
-(function (window) {
+(function (window, define, require) {
     'use strict';
-    return window.define([
-        'app/util/app',
+    return define([
         'can/util/library',
         'nod/util/nod',
         'nod/util/logger',
@@ -9,7 +8,7 @@
         'can/construct/super',
         'can/control',
         'can/view/mustache'
-    ], function (app, can, nod) {
+    ], function (can, nod) {
         nod.control.Nod = can.Control({
             newInstance : function () {
                 var inst = this.instance.apply(this, arguments),
@@ -107,7 +106,7 @@
                 }
                 if (this.isFilterPending(name)) {
                     return this.methodExists(name) ?
-                        this[name].apply(this, args) : false;
+                            this[name].apply(this, args) : false;
                 }
                 return false;
             },
@@ -142,6 +141,7 @@
                     return false;
                 }
                 can.$.each(filters, function (key, value) {
+                    /*jslint unparam: true*/
                     this.filters[value] = can.$.Deferred();
                 }.bind(this));
                 return this.filters;
@@ -174,7 +174,7 @@
                 if (!this.selector) {
                     this.selector = element || this.element.selector;
                 }
-                console.log(this.name);
+                window.console.log(this.name);
                 if (!this.options.selectors[this.name.camelize(false)]) {
                     this.options.selectors[this.name.camelize(false)] = element;
                 }
@@ -286,7 +286,7 @@
                     return false;
                 }
                 return typeof context[name] === 'function' ?
-                    true : false;
+                        true : false;
             },
             getPrototype        : function (context) {
                 context = context || this;
@@ -356,14 +356,14 @@
                     cls         = this.constructor;
 
                 options = can.$.extend(true,
-                    this.options.skipSetup.parentOptions !== true ?
-                        this.parentOptions : {},
-                    this.defaults || {},
-                    cls.defaults || {},
-                    data || {},
-                    this.options || {},
-                    options || {}
-                );
+                        this.options.skipSetup.parentOptions !== true ?
+                                this.parentOptions : {},
+                        this.defaults || {},
+                        cls.defaults || {},
+                        data || {},
+                        this.options || {},
+                        options || {}
+                    );
                 return options;
             },
             newControl              : function (name, options, element) {
@@ -390,9 +390,9 @@
                     .then(function () {
                         return this.applyResolve(afterControl, arguments);
                     }.bind(this),
-                    function () {
-                        return this.applyReject(afterControl, arguments);
-                    }.bind(this));
+                        function () {
+                            return this.applyReject(afterControl, arguments);
+                        }.bind(this));
             },
             reject              : function () {
                 return this.respond.apply(this, can.$.merge([false], arguments));
@@ -443,7 +443,9 @@
             },
             renderTemplate          : function (name, viewOptions) {
                 var afterRenderTemplate = can.$.Deferred(),
-                    templateName, idName;
+                    templateName,
+                    idName;
+
                 if (!name) {
                     return this.reject(afterRenderTemplate, false, name, viewOptions);
                 }
@@ -453,7 +455,7 @@
                     extension   : viewOptions.extension || viewOptions.type,
                     name        : name
                 });
-                idName          = '#' + name;
+                idName = '#' + name;
                 if (this.getElement('body').find(idName).length) {
                     return this.resolve(afterRenderTemplate, templateName, name, idName);
                 }
@@ -464,16 +466,16 @@
                     plugin      : 'text',
                     name        : name
                 })
-                .then(function (template) {
-                    this.getElement('body').append(this.makeTemplate({
-                        name        : name,
-                        template    : template,
-                        type        : viewOptions.type
-                    }));
-                    return this.resolve(afterRenderTemplate, templateName, idName, name);
-                }.bind(this), function () {
-                    return this.reject(afterRenderTemplate, templateName, idName, name);
-                }.bind(this));
+                    .then(function (template) {
+                        this.getElement('body').append(this.makeTemplate({
+                            name        : name,
+                            template    : template,
+                            type        : viewOptions.type
+                        }));
+                        return this.resolve(afterRenderTemplate, templateName, idName, name);
+                    }.bind(this), function () {
+                        return this.reject(afterRenderTemplate, templateName, idName, name);
+                    }.bind(this));
                 return afterRenderTemplate.promise();
             },
             makeTemplate        : function (options) {
@@ -490,37 +492,37 @@
                 return this.deferMap(this.styles, function (name) {
                     return this.renderStyle(name);
                 }.bind(this))
-                .then(function () {
-                    return this.filter('afterStyles', arguments);
-                }.bind(this), function () {
-                    return this.applyReject('afterStyles', arguments);
-                }.bind(this))
-                .then(function () {
-                    return this.deferMap(this.templates, function (name) {
-                        return this.renderTemplate(name);
+                    .then(function () {
+                        return this.filter('afterStyles', arguments);
+                    }.bind(this), function () {
+                        return this.applyReject('afterStyles', arguments);
                     }.bind(this))
                     .then(function () {
-                        return this.filter('afterTemplates', [this.templates]);
+                        return this.deferMap(this.templates, function (name) {
+                            return this.renderTemplate(name);
+                        }.bind(this))
+                            .then(function () {
+                                return this.filter('afterTemplates', [this.templates]);
+                            }.bind(this), function () {
+                                return this.applyReject('afterTemplates', arguments);
+                            }.bind(this));
+                    }.bind(this))
+                    .then(function () {
+                        return this.deferMap(this.templates, function (name) {
+                            return this.renderView(name);
+                        }.bind(this));
+                    }.bind(this))
+                    .then(function () {
+                        return this.filter('afterViews', [this.templates]);
                     }.bind(this), function () {
-                        return this.applyReject('afterTemplates', arguments);
+                        return this.applyReject('afterViews', arguments);
+                    }.bind(this))
+                    .then(function () {
+                        this.setElements(this.elements, this.element);
+                        return this.applyResolve('render', arguments);
+                    }.bind(this), function () {
+                        return this.applyReject('render', arguments);
                     }.bind(this));
-                }.bind(this))
-                .then(function () {
-                    return this.deferMap(this.templates, function (name) {
-                        return this.renderView(name);
-                    }.bind(this));
-                }.bind(this))
-                .then(function () {
-                    return this.filter('afterViews', [this.templates]);
-                }.bind(this), function () {
-                    return this.applyReject('afterViews', arguments);
-                }.bind(this))
-                .then(function () {
-                    this.setElements(this.elements, this.element);
-                    return this.applyResolve('render', arguments);
-                }.bind(this), function () {
-                    return this.applyReject('render', arguments);
-                }.bind(this));
             },
             deferMap            : function (arrayOrObject, callback) {
                 return can.$.when.apply(can.$, can.$.map(arrayOrObject, callback.bind(this)));
@@ -552,16 +554,16 @@
                         element = element[viewOptions.method](can.view(idName, data));
                         return this.applyResolve(afterView, args);
                     }.bind(this),
-                    function () {
-                        var args = can.$.merge([name, viewOptions, data], arguments);
-                        return this.applyReject(afterView, args);
-                    }.bind(this));
+                        function () {
+                            var args = can.$.merge([name, viewOptions, data], arguments);
+                            return this.applyReject(afterView, args);
+                        }.bind(this));
 
                 return afterView.promise();
             },
             getPath             : function (name) {
-                return !name ? this.options.path : (this.options.path[name] ?
-                    this.options.path[name] : '');
+                return !name ? this.options.path
+                    : (this.options.path[name] || '');
             },
             getLoaded           : function (name, type) {
                 if (!name) {
@@ -594,10 +596,10 @@
                 required.name = this.requireName(required.name);
                 required = can.$.extend({
                     namespace   : this.options.namespace,
-                    prefix      : required.plugin ?
-                        required.plugin + '!' : '',
+                    prefix : required.plugin ?
+                            required.plugin + '!' : '',
                     extension   : required.ext ?
-                        '.' + required.ext : ''
+                            '.' + required.ext : ''
                 }, required);
                 var path = '{prefix}{namespace}/{type}/{name}{extension}'
                     .assign(required)
@@ -630,25 +632,25 @@
                 }
                 return name.underscore();
             },
-            require             : function (args) {
+            require             : function (a, b, c, d, e) {
                 var afterRequire    = can.$.Deferred(),
-                    path            = false,
-                    required;
+                    path            = false;
+
                 if (arguments.length === 1) {
-                    if (typeof args === 'object') {
-                        path = args;
+                    if (typeof a === 'object') {
+                        path = a;
                     }
-                    if (typeof args === 'string') {
-                        path = args;
+                    if (typeof a === 'string') {
+                        path = a;
                     }
                 }
                 if (arguments.length > 1) {
-                    required = path = {
-                        name        : arguments[0],
-                        type        : arguments[1],
-                        namespace   : arguments[2] || this.options.namespace,
-                        extension   : arguments[3],
-                        plugin      : arguments[4]
+                    path = {
+                        name      : a,
+                        type      : b,
+                        namespace : c || this.options.namespace,
+                        extension : d,
+                        plugin    : e
                     };
                 }
                 if (typeof path === 'object') {
@@ -679,7 +681,7 @@
             },
             isDevelopment       : function () {
                 return this.options.environment === 'development' ?
-                    true : false;
+                        true : false;
             },
             loadMethodByType    : function (type, context) {
                 context = context || this;
@@ -688,7 +690,7 @@
                 }
                 var loadMethod  = 'load' + type.capitalize();
                 return context[loadMethod] ?
-                    context[loadMethod].bind(context) : false;
+                        context[loadMethod].bind(context) : false;
             },
             renderStyle         : function (name, styleOptions) {
                 styleOptions = can.$.extend(true, this.options.render.style, styleOptions, {
@@ -708,8 +710,8 @@
                     if (can.$.isFunction(loadMethod, this)) {
                         if ($styleLink) {
                             loadMethod($styleLink, styleOptions)
-                                .then(function () {
-                                    this.attachToNamespace(this.name, styleOptions.type, arguments[0]);
+                                .then(function (a) {
+                                    this.attachToNamespace(this.name, styleOptions.type, a);
                                     return this.applyResolve(afterStyle, arguments);
                                 }.bind(this), function () {
                                     return this.reject(afterStyle, name, styleOptions);
@@ -741,7 +743,7 @@
                             return this.applyReject(afterLess, arguments);
                         }
                         if (this.isDevelopment()) {
-                            console.groupCollapsed('Loading LESS');
+                            window.console.groupCollapsed('Loading LESS');
                         }
                         try {
                             window.less.sheets.push($styleLink.get(0));
@@ -750,13 +752,13 @@
                             this.logger.log('LESS error', e);
                         }
                         if (this.isDevelopment()) {
-                            console.groupEnd();
+                            window.console.groupEnd();
                         }
                         return this.applyResolve(afterLess, arguments);
                     }.bind(this),
-                    function () {
-                        return this.applyReject(afterLess, arguments);
-                    }.bind(this));
+                        function () {
+                            return this.applyReject(afterLess, arguments);
+                        }.bind(this));
             },
             configureLess       : function () {
                 var afterLess = can.$.Deferred();
@@ -799,7 +801,7 @@
                     }
                     if (typeof selector === 'object') {
                         elements[name] = selector.length ?
-                            selector : can.$(selector);
+                                selector : can.$(selector);
                         return true;
                     }
                 }.bind(this));
@@ -818,4 +820,4 @@
 
         return nod;
     });
-}) (window);
+}(window, define, require));

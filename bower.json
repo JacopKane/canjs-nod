@@ -1,6 +1,6 @@
 {
 	"name"			: "canjs-nod",
-	"version"		: "0.0.11",
+	"version"		: "0.0.12",
 	"description"	: "A ready to go CanJS plugin as an AMD module with more opinionated and event behavioured extra functionalities.",
 	"keywords"		: [
 		"canjs",
@@ -16,9 +16,16 @@
 		"Furkan Tunalı <furkan@nod.st>",
 		"NOD Studios <hey@nod.st>"
 	],
+    "ignore": [
+        "**/.*",
+        "node_modules",
+        "bower_components",
+        "test",
+        "tests"
+    ],
 	"main"			: "nod/",
 	"dependencies"	: {
-		"jquery"		: "*",
+		"jquery"		: "1.*.*",
 		"text"			: "requirejs-text#2.*.*",
 		"require"		: "requirejs#2.*.*",
 		"stacktrace"	: "0.*.*",
