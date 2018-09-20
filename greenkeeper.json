@@ -1,0 +1,12 @@
+{
+  "groups": {
+    "default": {
+      "packages": [
+        ".bower-cache/b4955b2943e1c319331f0e027622865a/0.6.0/package.json",
+        ".bower-cache/f3b72beceafaab79b3b463cf7c52211d/2.0.12/package.json",
+        "vendor/stacktrace/package.json",
+        "vendor/text/package.json"
+      ]
+    }
+  }
+}
